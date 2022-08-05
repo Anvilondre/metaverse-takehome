@@ -36,7 +36,7 @@ if __name__ == '__main__':
         return " ".join(words)
 
 
-    # Clean the data and calculate Tf-Idfs
+    # Clean the data and calculate Tf-Idfs with filtering very frequent and infrequent words
     train_vectorizer = TfidfVectorizer(min_df=0.005, max_df=0.6)
     train_y = train.label
     train_X = train.text.progress_apply(clean)

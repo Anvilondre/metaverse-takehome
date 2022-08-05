@@ -1,6 +1,6 @@
 # Take-home assignment for Metaverse Mind 
 
-**!! Note:* I don't think someone will actually clone this repo, so didn't include the requirements.txt, but the project mainly relies on sklearn, torch, transformers and nltk
+**!! Note:** I don't think someone will actually clone this repo, so didn't include the requirements.txt, but the project mainly relies on sklearn, torch, transformers and nltk.
 
 ## Overall time spent
 1 evening + a bit in the morning, I'd estimate to 4-5h, which is more than was expected in the test task. I'd say fit-predicts were like 1h tops for me, the rest was data exploration and iteration. I didn't go further with the data drift thingy exactly because I've noticed my time spent was much greater than requested.
@@ -28,7 +28,7 @@ However, it failed in comparison to the Tf-IDf approach, which can be easily int
 **!! Note:** this script was trained on a machine from a computing cluster, with 2 RTX6000 GPUs in multiprocessing. I'm attaching `slurm_job.sh` I used just for the sake of reproducibility.
 
 ## LogReg.py
-That's my second model. Basically `simple text cleaning -> sklearn Tf-IDf -> sklearn Logistic Regression`.
+That's my second model. Basically `simple text cleaning -> sklearn Tf-IDf -> filter out very frequent and infrequent words -> sklearn Logistic Regression`.
 
 
 ## Results
