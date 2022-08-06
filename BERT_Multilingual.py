@@ -30,8 +30,8 @@ class FakeNewsDataset(Dataset):
 
 if __name__ == '__main__':
 
-    # We don't need NaNs in train text folder
-    data = pd.read_csv('./fake_news/train.csv').dropna(subset=['text'])
+    # We don't need NaNs in train titles
+    data = pd.read_csv('./fake_news/train.csv').dropna(subset=['title'])
 
     BERT_MODEL = "bert-base-multilingual-uncased"
     BATCH_SIZE = 8
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     # Multiprocessing wrapper
     model = nn.DataParallel(model, device_ids=[0, 1]).to(device)
 
-    dataset = FakeNewsDataset(data.text.tolist(), data.label.tolist(), tokenizer)
+    dataset = FakeNewsDataset(data.title.tolist(), data.label.tolist(), tokenizer)
 
     # Splits to spot overfitting easier
     train_dataset, valid_dataset = random_split(
@@ -101,7 +101,7 @@ if __name__ == '__main__':
         torch.save(model.state_dict(), f'./checkpoints/{epoch}_model.pt')
     
     # Filling NaNs with blank spaces in hope BERT will understand (probably better do it rule-based)
-    test_X = pd.read_csv('./fake_news/test.csv').text.fillna(' ').tolist()
+    test_X = pd.read_csv('./fake_news/test.csv').title.fillna(' ').tolist()
     test_y = pd.read_csv('./fake_news/labels.csv').label.tolist()
     
     # Testing datasets
@@ -146,5 +146,5 @@ if __name__ == '__main__':
         'test_confusion_matrix': conf_matrix.tolist()
     }
 
-    with open('results_bert.json', 'w') as f:
+    with open('results_bert_title.json', 'w') as f:
         json.dump(results, f)

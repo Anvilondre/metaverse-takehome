@@ -10,16 +10,17 @@ from nltk import word_tokenize
 from nltk.stem.porter import PorterStemmer
 
 from tqdm import tqdm
+tqdm.pandas()
 
 if __name__ == '__main__':
     
-    # Load the data and drop NaN texts from train
-    train = pd.read_csv('./fake_news/train.csv').dropna(subset='text')
+    # Load the data and drop NaN titles from train
+    train = pd.read_csv('./fake_news/train.csv').dropna(subset='title')
     test = pd.read_csv('./fake_news/test.csv')
     labels = pd.read_csv('./fake_news/labels.csv')
 
     # I don't believe empty news :D
-    test_idx = ~test.text.isna()
+    test_idx = ~test.title.isna()
     test.loc[~test_idx, 'prediction'] = 1
 
     stemmer = PorterStemmer()
@@ -36,13 +37,13 @@ if __name__ == '__main__':
         return " ".join(words)
 
 
-    # Clean the data and calculate Tf-Idfs with filtering very frequent and infrequent words
-    train_vectorizer = TfidfVectorizer(min_df=0.005, max_df=0.6)
+    # Clean the data and calculate Tf-Idfs over titles
+    train_vectorizer = TfidfVectorizer()
     train_y = train.label
-    train_X = train.text.progress_apply(clean)
+    train_X = train.title.progress_apply(clean)
     train_X = train_vectorizer.fit_transform(train_X)
 
-    test_X = test.loc[test_idx].text.progress_apply(clean)
+    test_X = test.loc[test_idx].title.progress_apply(clean)
     test_X = train_vectorizer.transform(test_X)
     
     # Fit the log. reg.
@@ -65,7 +66,7 @@ if __name__ == '__main__':
         'test_confusion_matrix': conf_matrix.tolist()
     }
 
-    with open('results_logreg.json', 'w') as f:
+    with open('results_logreg_title.json', 'w') as f:
         json.dump(results, f)
 
 
