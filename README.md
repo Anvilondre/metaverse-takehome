@@ -43,7 +43,7 @@ Files with Accuracy, F1 and Confusion Matrix:
 | BERT_Text    | 0.632    | 0.647 |
 | LogReg_Text  | 0.644    | 0.652 |
 | BERT_Title   | 0.637    | 0.653 |
-|**LogReg_Title** | **0.703**    | **0.740** |
+|**LogReg_Title** | **0.727**    | **0.769** |
 
 ## Potential improvements
 - Explore the train/test drift and find why metrics are so different

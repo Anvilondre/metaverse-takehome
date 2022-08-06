@@ -15,22 +15,20 @@ tqdm.pandas()
 if __name__ == '__main__':
     
     # Load the data and drop NaN titles from train
-    train = pd.read_csv('./fake_news/train.csv').dropna(subset='title')
+    train = pd.read_csv('./fake_news/train.csv').fillna(' ')
     test = pd.read_csv('./fake_news/test.csv')
     labels = pd.read_csv('./fake_news/labels.csv')
 
     # I don't believe empty news :D
-    test_idx = ~test.title.isna()
+    test_idx = ~(test.title.isna() | test.text.isna())
     test.loc[~test_idx, 'prediction'] = 1
-
-    stemmer = PorterStemmer()
 
     # Retrieve stopwords from all of the available languages into one set
     stop_words = set(sum([stopwords.words(language) for language in stopwords.fileids()], []))
 
     def clean(text):
         words = word_tokenize(text)
-        words = [stemmer.stem(w.lower()) for w in words if  # Stem and lower
+        words = [w.lower() for w in words if  # Lower
                 not w in stop_words  # Not a stop word
                 and w.isalpha()]  # Only contains letters
 
